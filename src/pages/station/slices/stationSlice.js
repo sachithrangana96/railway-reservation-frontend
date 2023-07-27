@@ -1,40 +1,35 @@
 import httpClient, { API_BASE_URL } from "../../../utils/httpClient";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
-export const fetchReservation = createAsyncThunk(
-  "reserve/fetchReserve",
+export const fetchStation = createAsyncThunk(
+  "station/fetchStation",
   async (query) => {
     const response = await httpClient.get(
-      `${API_BASE_URL}/trains?startStation=${query.from}&endStation=${query.to}&date=${query.date}`
+      `${API_BASE_URL}/station`
     );
     return response.data;
   }
 );
 
 const reservertionSlice = createSlice({
-  name: "reservation",
+  name: "stations",
   initialState: {
-    allReservation: null,
-    singleRecord: null,
+    stationAll: null,
     loading: null,
     error: null,
   },
-  reducers: {
-    getSingleRecord: (state, action) => {
-      state.singleRecord = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchReservation.pending, (state) => {
+      .addCase(fetchStation.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(fetchReservation.fulfilled, (state, action) => {
+      .addCase(fetchStation.fulfilled, (state, action) => {
         state.loading = false;
-        state.allReservation = action.payload;
+        state.stationAll = action.payload;
       })
-      .addCase(fetchReservation.rejected, (state, action) => {
+      .addCase(fetchStation.rejected, (state, action) => {
         console.log(action);
         state.loading = false;
         state.error = action.payload?.message;
@@ -42,5 +37,5 @@ const reservertionSlice = createSlice({
   },
 });
 
-export const { getSingleRecord } = reservertionSlice.actions;
+
 export default reservertionSlice.reducer;
