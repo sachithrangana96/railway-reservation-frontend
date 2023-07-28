@@ -1,11 +1,13 @@
 import axios from "axios";
 
-export const API_BASE_URL = 'http://localhost:4000';
+export const API_BASE_URL = 'http://192.168.8.105:4000';
 
 const api = axios.create({
-    baseURL:API_BASE_URL,
+    baseURL:'http://localhost:4000',
+    withCredentials:true,
+    timeout:80000,
     headers:{
-        'Content-Type':'application/json',
+        Accept: 'application/json'
     }
 });
 

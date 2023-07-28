@@ -10,7 +10,7 @@ import Login   from './pages/auth//login/index';
 import Register   from './pages/auth//register/index';
 import ProtectedRoute from './ProtectedRoute';
 import { useEffect, useState } from 'react';
-import { API_BASE_URL } from './utils/httpClient';
+import httpClient,{ API_BASE_URL } from './utils/httpClient';
 
 function App() {
   const [isUser, setIsUser] = useState(false);
@@ -18,7 +18,7 @@ function App() {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/users/profile/me`);
+        const response = await httpClient.get(`/users/me`);
         return !!response.data;
       } catch (error) {
         return false;

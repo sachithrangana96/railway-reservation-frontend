@@ -3,9 +3,12 @@ import { createAsyncThunk,createSlice } from '@reduxjs/toolkit'
 
 export const login = createAsyncThunk(
     'login/auth',
-    async(requestData)=>{
+    async({requestData,navigate})=>{
         try{
-          const response = await httpClient.post(`${API_BASE_URL}/auth`,requestData);
+          console.log(requestData, 'requestData')
+          const response = await httpClient.post(`/auth/login`,requestData);
+          console.log(response)
+          navigate('/')
           return response.data;
         }catch(error){
             throw error;
@@ -18,7 +21,7 @@ export const signup = createAsyncThunk(
     'register/auth',
     async(requestData)=>{
         try {
-            const response = await httpClient.post(`${API_BASE_URL}/auth/user`,requestData);
+            const response = await httpClient.post(`/auth/user`,requestData);
             return response.data;
         } catch (error) { 
             throw error

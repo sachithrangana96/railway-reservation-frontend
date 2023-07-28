@@ -24,8 +24,7 @@ const Index = () => {
 
   const onSubmit = async (data) => {
     console.log(data);
-    await dispatch(login(data))
-    navigate('/');
+    await dispatch(login({requestData:data, navigate}))
 
   };
   return (
