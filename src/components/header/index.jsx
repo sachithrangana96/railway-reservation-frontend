@@ -55,7 +55,7 @@ const Index = () => {
             textDecoration: 'none',
           }}
         >
-          LOGO
+          LR
         </Typography>
 
         <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>

@@ -25,8 +25,7 @@ const Index = () => {
               About Us
             </Typography>
             <Typography variant="body2" color="text.secondary">
-              We are XYZ company, dedicated to providing the best service to our
-              customers.
+              We are LankRail, Best railway resevation company in sri lanka
             </Typography>
           </Grid>
           <Grid item xs={12} sm={4}>

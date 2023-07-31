@@ -10,7 +10,10 @@ import Login   from './pages/auth//login/index';
 import Register   from './pages/auth//register/index';
 import ProtectedRoute from './ProtectedRoute';
 import { useEffect, useState } from 'react';
+import BookingHistory from './pages/BookingHistory'
+import Profile from './pages/user_profile'
 import httpClient,{ API_BASE_URL } from './utils/httpClient';
+import UpdateProfile from './pages/update_profile'
 
 function App() {
   const [isUser, setIsUser] = useState(false);
@@ -40,9 +43,12 @@ function App() {
          <Container maxWidth="lg" sx={{padding:'20px'}}>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/reserve/:id" element={<ProtectedRoute user={isUser}><Booking /></ProtectedRoute>} />
+              <Route path="/reserve/:id" element={<Booking />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/history" element={<BookingHistory/>}/>
+              <Route path="/profile" element={<Profile/>}/>
+              <Route path="/update" element={<UpdateProfile/>}/>
             </Routes>
          </Container>
         <Footer />
