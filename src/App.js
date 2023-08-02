@@ -11,27 +11,26 @@ import Register   from './pages/auth//register/index';
 import ProtectedRoute from './ProtectedRoute';
 import { useEffect, useState } from 'react';
 import { API_BASE_URL } from './utils/httpClient';
+import { fetchMe } from './pages/profile/slices/profileSlice';
+import { useSelector,useDispatch } from 'react-redux';
 
 function App() {
   const [isUser, setIsUser] = useState(false);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/users/profile/me`);
+        const response = await dispatch(fetchMe());
         return !!response.data;
       } catch (error) {
         return false;
       }
     };
 
-    const fetchUserStatus = async () => {
-      const authenticated = await checkUser();
-      setIsUser(authenticated);
-    };
-
-    fetchUserStatus();
-  }, [isUser]);
+    checkUser();
+   
+  }, []);
 
   return (
      <div>
@@ -40,7 +39,8 @@ function App() {
          <Container maxWidth="lg" sx={{padding:'20px'}}>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/reserve/:id" element={<ProtectedRoute user={isUser}><Booking /></ProtectedRoute>} />
+              {/* <Route path="/reserve/:id" element={<ProtectedRoute user={isUser}><Booking /></ProtectedRoute>} /> */}
+              <Route path="/reserve/:id" element={<Booking />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
             </Routes>

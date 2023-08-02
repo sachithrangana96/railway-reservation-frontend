@@ -21,6 +21,7 @@ import Grid from "@mui/material/Unstable_Grid2";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
+import { fetchMe } from '../profile/slices/profileSlice'
 
 // import { LocalizationProvider, DatePicker } from '@mui/lab';
 
@@ -52,6 +53,20 @@ const Index = () => {
   useEffect(()=>{
       dispatch(fetchStation());
   },[])
+
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const response = await dispatch(fetchMe());
+        return !!response.data;
+      } catch (error) {
+        return false;
+      }
+    };
+
+    checkUser();
+   
+  }, []);
 
   const {
     register,

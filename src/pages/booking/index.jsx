@@ -21,7 +21,7 @@ const Index = () => {
 
     const onSubmit = async(data) => {
         let saveData = {
-            date:data.date,
+            date:selecetdValue.date,
             train: selecetdValue._id,
             user:"649be0977968deaf21813ce9",
             quantity:data.quantity,
@@ -42,7 +42,7 @@ const Index = () => {
     <Card container sx={{ height:'40vh',padding:'50px 10px' }}>
     <CardContent>
     <form onSubmit={handleSubmit(onSubmit)}>
-    <Grid container spacing={2}>
+    <Grid container spacing={3}>
       <Grid item xs={4}> 
        <Card sx={{ maxWidth: 345 }}>
               <CardContent>
@@ -59,40 +59,27 @@ const Index = () => {
                     <Typography gutterBottom variant="h5" component="div">
                        (One Way)
                     </Typography>
+                    <Typography gutterBottom variant="h5" component="div">
+                       {selecetdValue?.bookingStatus?.date}
+                    </Typography>
                 </CardContent>
              </CardContent>
             </Card> 
       </Grid>
     
-      <Grid container spacing={2} item xs={6} sx={{padding:'50px 10px',}}>
-      <Grid item xs={6}>
-              <TextField
-                id="date"
-                label="Date"
-                name='date'
-                {...register("date", {
-                  required: "This is required.",
-                })}
-                type='date'
-                maxRows={4}
-                fullWidth
-                />
-                {errors.date && <p  style={{color:'red'}}>{errors.date.message}</p>}
-               </Grid>
-           
-            <Grid item xs={6}>
+      <Grid container spacing={1} item xs={6}>        
+            <Grid item xs={12}>
                <TextField
                 id="outer-price"
                 label="Number of Seats"
                 type='number'
                 name="quantity"
-                maxRows={4}
+                maxRows={2}
                 fullWidth
                 {...register("quantity", {
                   required: "This is required.",
                 })}
                 onChange={handleChangePrice}
-                sx={{marginRight:'10px'}}
                 />
                 {errors.quantity && <p  sx={{color:'red'}}>{errors.quantity.message}</p>}
              </Grid>
@@ -103,7 +90,7 @@ const Index = () => {
                 label="Total Price"
                 name='price'
                 value={total}
-                maxRows={4}
+                maxRows={2}
                 fullWidth
                 readonly
                 />
