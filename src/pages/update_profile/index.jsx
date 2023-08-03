@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Button,
@@ -14,16 +14,41 @@ import {
   Email,
   AddHomeWork,
 } from "@mui/icons-material";
+import httpClient from '../../utils/httpClient'
 
 const UpdateProfile = () => {
+  const [profile, setProfile] = useState({})
+
+
+  const fetchData = async()=>{
+    const res = await httpClient.get('/users/me')
+    if(res.data){
+      setProfile(res.data)
+    }
+  }
+
+  useEffect(()=>{
+    fetchData()
+  },[])
+
+ 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
-  } = useForm();
+  } = useForm({});
+
+  useEffect(()=> {
+    console.log(profile)
+    setValue('full_name', profile?.full_name)
+    setValue('mobile', profile?.mobile)
+    setValue('address', profile?.address)
+  },[profile])
 
   const onSubmit = async (data) => {
-    console.log(data);
+    await httpClient.post('/users/update', data)
+    window.location.href = '/profile'
   };
 
   return (
@@ -46,13 +71,13 @@ const UpdateProfile = () => {
                 <TextField
                   id="name-outline"
                   label="Name"
-                  name="name"
-                  {...register("name", {
+                  name="full_name"
+                  {...register("full_name", {
                     required: "Name is required.",
                   })}
                   fullWidth
-                  error={errors?.first_name}
-                  helperText={errors.first_name?.message}
+                  error={errors?.full_name}
+                  helperText={errors.full_name?.message}
                   sx={{ marginRight: "10px" }}
                   InputProps={{
                     startAdornment: (
@@ -72,8 +97,8 @@ const UpdateProfile = () => {
                   type="number"
                   {...register("mobile", {
                     required: "Mobile is required.",
-                    minLength: 10,
-                    maxLength: 10,
+                    minLength: 8,
+                    maxLength: 12,
                   })}
                   fullWidth
                   error={errors?.mobile}
@@ -90,29 +115,7 @@ const UpdateProfile = () => {
                 />
               </Grid>
 
-              <Grid item xs={12}>
-                <TextField
-                  id="email-outline"
-                  label="Email"
-                  name="email"
-                  {...register("email", {
-                    required: "Email is required.",
-                    pattern:
-                      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                  })}
-                  fullWidth
-                  error={errors?.email}
-                  sx={{ marginRight: "10px" }}
-                  helperText={errors.email?.message}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <Email />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
+          
 
               <Grid item xs={12}>
                 <TextField

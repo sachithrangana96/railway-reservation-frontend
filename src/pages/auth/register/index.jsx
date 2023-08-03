@@ -18,6 +18,7 @@ import {
 import {  useDispatch } from "react-redux";
 import { signup } from "../slices/authSlice";
 import registerImg from "../../../assets/img/register.jpg";
+import httpClient from '../../../utils/httpClient'
 
 const gender = [
   {
@@ -41,8 +42,13 @@ const Index = () => {
 
   const onSubmit = async (data) => {
     console.log(data);
-    const user = await dispatch(signup({ ...data, status: "active" }));
-    if (user) navigate("/");
+    data.status = 'active'
+    //await dispatch(signup({ ...data, status: "active", navigate }));
+    await httpClient.post('/auth/user', data)
+    window.location.href = '/'
+    console.log(data)
+
+
   };
   return (
     <div container style={{ height: "auto", padding: "50px 10px" }}>
@@ -65,13 +71,13 @@ const Index = () => {
               <TextField
                 id="name-outline"
                 label="Name"
-                name="name"
-                {...register("name", {
+                name="full_name"
+                {...register("full_name", {
                   required: "Name is required.",
                 })}
                 fullWidth
-                error={errors?.name}
-                helperText={errors.name?.message}
+                error={errors?.full_name}
+                helperText={errors.full_name?.message}
                 sx={{ marginRight: "10px" }}
                 InputProps={{
                   startAdornment: (

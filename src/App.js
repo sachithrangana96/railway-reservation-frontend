@@ -45,7 +45,7 @@ function App() {
          <Container maxWidth="lg" sx={{padding:'20px'}}>
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/reserve/:id" element={<Booking />} />
+              <Route path="/reserve/:id/:date/:price" element={<Booking />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/forget-password" element={<VerifyEmail />} />

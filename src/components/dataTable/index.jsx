@@ -23,57 +23,40 @@ const columns = [
   {
     width: 120,
     label: "Departs",
-    dataKey: "Departs",
-    numeric: true,
+    dataKey: "departs",
   },
   {
     width: 120,
     label: "Arrives",
     dataKey: "arrives",
-    numeric: true,
   },
   {
     width: 120,
     label: "Start Time",
-    dataKey: "start_time",
-    numeric: true,
+    dataKey: "startTime",
   },
   {
     width: 120,
     label: "Arrive Time",
-    dataKey: "arrive_time",
-    numeric: true,
+    dataKey: "endTime",
   },
   {
     width: 120,
     label: "Number Of Seats",
-    dataKey: "numberOfseat",
-    numeric: true,
+    dataKey: "numberOfSeats",
   },
   {
     width: 120,
     label: "Available Seats",
-    dataKey: "available_seats",
-    numeric: true,
+    dataKey: "availableSeats",
   },
 ];
 
-const sample = [
-  ["Frozen yoghurt", 159, 6.0, 24, 4.0],
-  ["Ice cream sandwich", 237, 9.0, 37, 4.3],
-  ["Eclair", 262, 16.0, 24, 6.0],
-  ["Cupcake", 305, 3.7, 67, 4.3],
-  ["Gingerbread", 356, 16.0, 49, 3.9],
-];
 
-function createData(id, dessert, calories, fat, carbs, protein) {
-  return { id, dessert, calories, fat, carbs, protein };
-}
 
-const rows = Array.from({ length: 200 }, (_, index) => {
-  const randomSelection = sample[Math.floor(Math.random() * sample.length)];
-  return createData(index, ...randomSelection);
-});
+
+
+
 
 const VirtuosoTableComponents = {
   Scroller: React.forwardRef((props, ref) => (
@@ -112,11 +95,18 @@ function fixedHeaderContent() {
   );
 }
 
-function rowContent(_index, row) {
+function RowContent(_index, row) {
+
+  const rowClick = (e) => {
+    window.location.href = `/reserve/${e?._id}/${e?.date}/${e?.price}`
+  };
+
   return (
     <React.Fragment>
       {columns.map((column) => (
+        
         <TableCell
+          onClick={() => rowClick(row)}
           key={column.dataKey}
           align={column.numeric || false ? "right" : "left"}
         >
@@ -130,21 +120,16 @@ function rowContent(_index, row) {
 const Index = (props) => {
   const { record } = props;
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+ 
 
-  const rowClick = (e) => {
-    console.log("rowValue", e);
-    dispatch(getSingleRecord(e));
-    navigate(`reserve/${e._id}`);
-  };
+ 
   return (
     <TableContainer component={Paper}>
       <TableVirtuoso
-        data={rows}
+        data={record}
         components={VirtuosoTableComponents}
         fixedHeaderContent={fixedHeaderContent}
-        itemContent={rowContent}
-        onClick={rowClick}
+        itemContent={RowContent}
       />
     </TableContainer>
   );

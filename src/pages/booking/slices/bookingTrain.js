@@ -4,6 +4,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 export const createBooking = createAsyncThunk(
   "booking/bookingTrain",
   async (requestData) => {
+    console.log("request data", requestData)
     try {
       ;
       const response = await httpClient.post(

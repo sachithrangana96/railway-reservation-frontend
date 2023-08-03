@@ -18,6 +18,10 @@ const Index = () => {
   useEffect(()=>{
       dispatch(fetchStation());
   },[])
+ useEffect(()=>{
+    console.log(reservations, "trains")
+    console.log(station)
+ },[reservations,station])
 
   const {
     register,
@@ -26,7 +30,7 @@ const Index = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log(data);
+    console.log(data, "form data");
     await dispatch(fetchReservation(data));
   };
 
@@ -49,13 +53,13 @@ const Index = () => {
                   className="text-box"
                 >
                   {station?.stationAll?.map((options) => (
-                    <option key={options.name} value={options._id}>
-                      {options.name}
+                    <option key={options.value} value={options.value}>
+                      {options.label}
                     </option>
                   ))}
                 </select>
                 {errors.from && (
-                  <p style={{ color: "white",fontWeight:'bold',backgroundColor:'red',padding:'5px' }}>{errors.from.message}</p>
+                  <p style={{ color: "red",fontWeight:'bold',padding:'5px' }}>{errors.from.message}</p>
                 )}
               </Grid>
               <Grid item xs={3}>
@@ -73,12 +77,12 @@ const Index = () => {
                   className="text-box"
                 >
                   {station?.stationAll?.map((option) => (
-                    <option key={option.name} value={option._id}>
-                      {option.name}
-                    </option>
+                  <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
                   ))}
                 </select>
-                {errors.to && <p style={{ color: "white",fontWeight:'bold',backgroundColor:'red',padding:'5px' }}>
+                {errors.to && <p style={{ color: "white", color: "red" ,padding:'5px' }}>
                   {errors.to.message}
                 </p>}
               </Grid>
@@ -94,7 +98,7 @@ const Index = () => {
                   className="text-box"
                 />
                 {errors.date && (
-                  <p style={{ color: "white",fontWeight:'bold',backgroundColor:'red',padding:'5px'}}>{errors.date.message}</p>
+                  <p style={{ color: "red",fontWeight:'bold',padding:'5px'}}>{errors.date.message}</p>
                 )}
               </Grid>
               <Grid item xs={3}>
@@ -114,9 +118,9 @@ const Index = () => {
 
         {reservations.loading &&(
             <Box sx={{ width: 300,margin:'0px 350px 0px 350px'}}>
-            <Skeleton sx={{backgroundColor:'red'}} />
-            <Skeleton sx={{backgroundColor:'red'}} animation="wave" />
-            <Skeleton sx={{backgroundColor:'red'}}  />
+            <Skeleton />
+            <Skeleton  animation="wave" />
+            <Skeleton />
           </Box>
 
           )}

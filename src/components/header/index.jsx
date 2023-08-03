@@ -13,13 +13,29 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import httpClient from '../../utils/httpClient'
 
-const pages = ['Our Services', 'login','register'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = [{name:'Profile', route:'profile'}, {name:'Booking History', route:'history'}, {name:'Logout', route:'logout'}];
 
 const Index = () => {
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
+    const [profile, setProfile] = useState({})
+
+
+    const fetchData = async()=>{
+      const res = await httpClient.get('/users/me')
+      if(res.data){
+        setProfile(res.data)
+      }
+    }
+  
+    useEffect(()=>{
+      fetchData()
+    },[])
+
+
+
   
     const handleOpenNavMenu = (event) => {
       setAnchorElNav(event.currentTarget);
@@ -108,41 +124,51 @@ const Index = () => {
         >
           LOGO
         </Typography>
-        <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-          <Button><Link to={"/login"} style={{textDecoration:'none',color:'white'}}>Login</Link></Button>
-          <Button> <Link to={"/register"} style={{textDecoration:'none',color:'white'}}>Register</Link></Button>
+        {profile?.full_name&&<Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}></Box>}
+       
+        {!profile?.full_name&&(
+ <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+ <Button><Link to={"/login"} style={{textDecoration:'none',color:'white'}}>Login</Link></Button>
+ <Button> <Link to={"/register"} style={{textDecoration:'none',color:'white'}}>Register</Link></Button>
 
-        </Box>
-
-        <Box sx={{ flexGrow: 0 }}>
-          <Tooltip title="Open settings">
-            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-            </IconButton>
-          </Tooltip>
-          <Menu
-            sx={{ mt: '45px' }}
-            id="menu-appbar"
-            anchorEl={anchorElUser}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            open={Boolean(anchorElUser)}
-            onClose={handleCloseUserMenu}
-          >
-            {settings.map((setting) => (
-              <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                <Typography textAlign="center">{setting}</Typography>
-              </MenuItem>
-            ))}
-          </Menu>
-        </Box>
+</Box>
+        )}
+       
+          {profile?.full_name&&(
+ <Box sx={{ flexGrow: 0 }}>
+ <Tooltip title="Open settings">
+   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+     <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+   </IconButton>
+ </Tooltip>
+ <Menu
+   sx={{ mt: '45px' }}
+   id="menu-appbar"
+   anchorEl={anchorElUser}
+   anchorOrigin={{
+     vertical: 'top',
+     horizontal: 'right',
+   }}
+   keepMounted
+   transformOrigin={{
+     vertical: 'top',
+     horizontal: 'right',
+   }}
+   open={Boolean(anchorElUser)}
+   onClose={handleCloseUserMenu}
+ >
+   {settings.map((setting) => (
+     <Link to={`/${setting.route}`} style={{textDecoration:'none', color:'black'}}>
+      <MenuItem key={setting} onClick={handleCloseUserMenu}>
+       <Typography textAlign="center">{setting.name}</Typography>
+     </MenuItem>
+     </Link>
+    
+   ))}
+ </Menu>
+</Box>
+          )}
+       
       </Toolbar>
     </Container>
   </AppBar>

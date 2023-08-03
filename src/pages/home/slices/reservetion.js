@@ -7,7 +7,23 @@ export const fetchReservation = createAsyncThunk(
     const response = await httpClient.get(
       `${API_BASE_URL}/trains?startStation=${query.from}&endStation=${query.to}&date=${query.date}`
     );
-    return response.data;
+    console.log(response, "trains data")
+    const trainData = response.data?.map((x)=>{
+      console.log(x?.bookingStatus?.availableSeats)
+      return{
+        name:x?.name,
+        departs:x?.startStation?.name,
+        arrives:x?.endStation?.name,
+        startTime:new Date(x?.startTime).toLocaleTimeString(),
+        endTime:new Date(x?.endTime).toLocaleTimeString(),
+        numberOfSeats: x?.bookingStatus?.numberOfSeats,
+        availableSeats: x?.bookingStatus?.availableSeats,
+        _id:x?._id,
+        date:query.date,
+        price:x?.price
+      }
+    })
+    return trainData
   }
 );
 
@@ -21,6 +37,7 @@ const reservertionSlice = createSlice({
   },
   reducers: {
     getSingleRecord: (state, action) => {
+      console.log(action?.payload, "action")
       state.singleRecord = action.payload;
     },
   },

@@ -8,8 +8,10 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {Box} from '@mui/material'
+import httpClient from '../../utils/httpClient'
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
@@ -30,15 +32,31 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function createData(name, date, startTime,endTime,start,end, status) {
+  
   return { name, date,startTime,endTime,start,end, status };
 }
 
-const rows = [
-  createData('Ruhunu Kumari', '8/5/2023', '2.00 PM', '8.00 PM', 'Matara', 'Colombo', 'Paid'),
-  createData('Sagarika', '8/5/2023', '4.00 PM', '8.00 PM', 'Matara', 'Colombo', 'Paid'),
-];
+// const rows = [
+//   createData('Ruhunu Kumari', '8/5/2023', '2.00 PM', '8.00 PM', 'Matara', 'Colombo', 'Paid'),
+//   createData('Sagarika', '8/5/2023', '4.00 PM', '8.00 PM', 'Matara', 'Colombo', 'Paid'),
+// ];
 
 export default function CustomizedTables() {
+  const [bookings, setBookings] = React.useState([])
+
+
+  const fetchData = async()=>{
+    const res = await httpClient.get('/bookings/user/userID')
+    if(res.data){
+      setBookings(res.data)
+    }
+  }
+
+  React.useEffect(()=>{
+    fetchData()
+  },[])
+
+  React.useEffect(()=>{console.log(bookings)},[bookings])
   return (
     <Box>
         <h3>Booking History</h3>
@@ -54,14 +72,14 @@ export default function CustomizedTables() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {bookings.map((row) => (
             <StyledTableRow key={row.name}>
               <StyledTableCell component="th" scope="row">
-                {row.name}
+                {row?.train?.name}
               </StyledTableCell>
-              <StyledTableCell align="right">{row.date}</StyledTableCell>
-              <StyledTableCell align="right">{row.startTime}-{row.endTime}</StyledTableCell>
-              <StyledTableCell align="right">{row.start}-{row.end}</StyledTableCell>
+              <StyledTableCell align="right">{row?.date}</StyledTableCell>
+              <StyledTableCell align="right">{new Date(row?.train?.startTime).toLocaleTimeString()}-{new Date(row?.train?.endTime).toLocaleTimeString()}</StyledTableCell>
+              <StyledTableCell align="right">{row.train.startStation?.name}-{row.train.endStation?.name}</StyledTableCell>
               <StyledTableCell align="right">{row.status}</StyledTableCell>
             </StyledTableRow>
           ))}

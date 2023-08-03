@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch,useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
+import { useParams } from "react-router-dom";
 import{Card,Grid,TextField,Button, CardContent,CardMedia,Typography, Modal, Box } from '@mui/material';
 import { useForm } from 'react-hook-form';
 import reservetion from '../home/slices/reservetion';
@@ -42,30 +43,28 @@ const Index = () => {
     const [total,SetTotal] = useState(0);
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const selecetdValue = useSelector((state)=>state.reservetion?.singleRecord);
+    const selecetdValue = useSelector((state)=>state.reservetion);
     const [open, setOpen] = React.useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+    const {id , date ,price} = useParams()
 
 
-    useEffect(()=>{
-      if(selecetdValue==null){
-        //navigate('/')
-      }
-    },[selecetdValue])
+   
 
     const onSubmit = async(data) => {
+      const priceX = parseInt(data.quantity) * parseInt(price)
+      console.log(price, "price")
+      console.log(data, "data")
         let saveData = {
-            date:data.date,
-            train: selecetdValue._id,
-            user:"649be0977968deaf21813ce9",
+            date:date,
+            train: id,
             quantity:data.quantity,
-            price:total,
+            price:priceX,
             status:"active"
         }
-        console.log(saveData)
-        debugger
         await dispatch(createBooking(saveData));
+        window.location.href = '/history'
       };
 
      const  handleChangePrice = (e) =>{
@@ -126,11 +125,10 @@ const Index = () => {
                 id="date"
                 label="Date"
                 name='date'
-                {...register("date", {
-                  required: "This is required.",
-                })}
                 type='date'
                 maxRows={4}
+                disabled={true}
+                value={date}
                 fullWidth
                 />
                 {errors.date && <p  style={{color:'red'}}>{errors.date.message}</p>}
@@ -158,7 +156,8 @@ const Index = () => {
                 id="outer-price"
                 label="Total Price"
                 name='price'
-                value={100}
+                disabled={true}
+                value={price}
                 maxRows={4}
                 fullWidth
                 readonly
