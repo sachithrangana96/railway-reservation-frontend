@@ -1,0 +1,32 @@
+.car-box{
+    background-image: url('../../assets/img/train-background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: auto;
+    padding: 25px;
+    margin-top:70px ;
+    margin-bottom: 50px;
+    /* opacity: 0.5; */
+}
+
+form{
+    margin:60px 0px 50px 0px;
+}
+
+.text-box{
+    border: 5px solid white !important;
+    color: rgb(162, 19, 19) !important;
+    width: 100%;
+    padding: 10px;
+}
+
+.button-box{
+    width: 80%;
+    padding: 15px;
+    margin-left: 30px;
+    background-color: #34495e;
+    color: white;
+    cursor: pointer;
+
+}

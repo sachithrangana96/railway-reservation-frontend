@@ -36,7 +36,7 @@ const Index = () => {
       setAnchorElUser(null);
     };
   return (
-    <AppBar position="static">
+    <AppBar position="fixed" sx={{backgroundColor:"#34495e"}}>
     <Container maxWidth="xl">
       <Toolbar disableGutters>
         <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

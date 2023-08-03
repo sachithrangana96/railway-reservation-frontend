@@ -14,6 +14,8 @@ import BookingHistory from './pages/BookingHistory'
 import Profile from './pages/user_profile'
 import httpClient,{ API_BASE_URL } from './utils/httpClient';
 import UpdateProfile from './pages/update_profile'
+import ForgetPassword from './pages/auth/forger-password/index'
+import VerifyEmail from './pages/auth/emailVerify/index'
 
 function App() {
   const [isUser, setIsUser] = useState(false);
@@ -46,6 +48,7 @@ function App() {
               <Route path="/reserve/:id" element={<Booking />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/forget-password" element={<VerifyEmail />} />
               <Route path="/history" element={<BookingHistory/>}/>
               <Route path="/profile" element={<Profile/>}/>
               <Route path="/update" element={<UpdateProfile/>}/>

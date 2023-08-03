@@ -1,51 +1,17 @@
-import React, { useEffect } from "react";
-import { useTheme } from "@mui/material/styles";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchReservation } from "./slices/reservetion";
 import { fetchStation } from "../station/slices/stationSlice";
 import DataTable from "../../components/dataTable/index";
-
-import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Card from "@mui/material/Card";
+import {Card,Skeleton,Box} from "@mui/material";
 import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import SkipPreviousIcon from "@mui/icons-material/SkipPrevious";
-import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import SkipNextIcon from "@mui/icons-material/SkipNext";
-import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Unstable_Grid2";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import Button from "@mui/material/Button";
+import './index.css'
 
-// import { LocalizationProvider, DatePicker } from '@mui/lab';
-
-const currencies = [
-  {
-    value: "Station A",
-    label: "Station A",
-  },
-  {
-    value: "Station B",
-    label: "Station B",
-  },
-  {
-    value: "Station C",
-    label: "Station C",
-  },
-  {
-    value: "Station D",
-    label: "Station D",
-  },
-];
 
 const Index = () => {
-  const theme = useTheme();
-  const dispatch = useDispatch();
+  const dispatch = useDispatch();  
   const reservations = useSelector((state) => state?.reservetion);
   const station = useSelector((state) => state?.station);
 
@@ -65,90 +31,99 @@ const Index = () => {
   };
 
   return (
-    <Card container sx={{ height: "auto", padding: "50px 10px" }}>
+    <Card  className="car-box">
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Grid container spacing={2}>
+          <Grid container spacing={1}>
             <Grid container item xs={12} sx={{ padding: "50px 10px" }}>
               <Grid item xs={3}>
-                <TextField
+                <select
                   id="from-outline"
                   select
-                  label="From"
+                  placeholder="From"
                   name="from"
                   {...register("from", {
-                    required: "This is required.",
+                    required: "From field is required.",
                   })}
                   fullWidth
-                  sx={{ marginRight: "10px" }}
+                  className="text-box"
                 >
-                  {station?.stationAll?.map((option) => (
-                    <MenuItem key={option.name} value={option._id}>
-                      {option.name}
-                    </MenuItem>
+                  {station?.stationAll?.map((options) => (
+                    <option key={options.name} value={options._id}>
+                      {options.name}
+                    </option>
                   ))}
-                </TextField>
+                </select>
                 {errors.from && (
-                  <p sx={{ color: "red" }}>{errors.from.message}</p>
+                  <p style={{ color: "white",fontWeight:'bold',backgroundColor:'red',padding:'5px' }}>{errors.from.message}</p>
                 )}
               </Grid>
               <Grid item xs={3}>
-                <TextField
+                <select
                   id="to-outline"
                   select
                   label="To"
                   name="to"
                   {...register("to", {
-                    required: "This is required.",
+                    required: "To field is required.",
                   })}
                   defaultValue="EUR"
                   fullWidth
                   sx={{ marginRight: "10px" }}
+                  className="text-box"
                 >
                   {station?.stationAll?.map((option) => (
-                    <MenuItem key={option.name} value={option._id}>
+                    <option key={option.name} value={option._id}>
                       {option.name}
-                    </MenuItem>
+                    </option>
                   ))}
-                </TextField>
-                {errors.to && <p sx={{ color: "red" }}>{errors.to.message}</p>}
+                </select>
+                {errors.to && <p style={{ color: "white",fontWeight:'bold',backgroundColor:'red',padding:'5px' }}>
+                  {errors.to.message}
+                </p>}
               </Grid>
 
               <Grid item xs={3}>
-                <TextField
+                <input
                   id="date"
                   name="date"
                   {...register("date", {
-                    required: "This is required.",
+                    required: "Date is required.",
                   })}
                   type="date"
-                  maxRows={4}
-                  fullWidth
+                  className="text-box"
                 />
                 {errors.date && (
-                  <p style={{ color: "red" }}>{errors.date.message}</p>
+                  <p style={{ color: "white",fontWeight:'bold',backgroundColor:'red',padding:'5px'}}>{errors.date.message}</p>
                 )}
               </Grid>
               <Grid item xs={3}>
-                <Button
+                <button
                   type="submit"
                   variant="contained"
                   fullWidth
-                  sx={{padding:'15px'}}
                   disableElevation
+                  className="button-box"
                 >
                   Reservation
-                </Button>
+                </button>
               </Grid>
             </Grid>
           </Grid>
         </form>
 
-        {reservations?.loading && <h1>Loading ....................</h1>}
+        {reservations.loading &&(
+            <Box sx={{ width: 300,margin:'0px 350px 0px 350px'}}>
+            <Skeleton sx={{backgroundColor:'red'}} />
+            <Skeleton sx={{backgroundColor:'red'}} animation="wave" />
+            <Skeleton sx={{backgroundColor:'red'}}  />
+          </Box>
+
+          )}
 
         {
           reservations?.allReservation?.length > 0 && (
-            <Grid container>
+            <Grid container style={{height:'300px',overflow:'auto'}}>
               <DataTable record={reservations?.allReservation} />
             </Grid>
           )
